@@ -1,80 +1,22 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { AnimeCard } from "@/components/AnimeCard";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Clock, Star } from "lucide-react";
-
-// Sample anime data with Muse Asia content
-const animeData = [
-  {
-    id: "1",
-    title: "Demon Slayer: Kimetsu no Yaiba",
-    thumbnail: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
-    episode: "EP 44",
-    rating: 9.2,
-    year: "2024",
-    genre: "Action",
-    videoId: "VQGcpZ2_YPE" // Sample video ID
-  },
-  {
-    id: "2", 
-    title: "Attack on Titan Final Season",
-    thumbnail: "https://images.unsplash.com/photo-1606603124734-a6f64c17cb10?w=400&h=600&fit=crop",
-    episode: "EP 28",
-    rating: 9.5,
-    year: "2023",
-    genre: "Drama",
-    videoId: "SlNpRThS9t8"
-  },
-  {
-    id: "3",
-    title: "Jujutsu Kaisen Season 2",
-    thumbnail: "https://images.unsplash.com/photo-1617696002096-1a0c8e65e9da?w=400&h=600&fit=crop",
-    episode: "EP 23",
-    rating: 8.9,
-    year: "2023",
-    genre: "Supernatural",
-    videoId: "4A_X-Dvl0ws"
-  },
-  {
-    id: "4",
-    title: "One Piece",
-    thumbnail: "https://images.unsplash.com/photo-1606603124734-a6f64c17cb10?w=400&h=600&fit=crop",
-    episode: "EP 1100",
-    rating: 9.0,
-    year: "2024",
-    genre: "Adventure",
-    videoId: "qIG1PiCyJ7s"
-  },
-  {
-    id: "5",
-    title: "My Hero Academia",
-    thumbnail: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
-    episode: "EP 158",
-    rating: 8.7,
-    year: "2024",
-    genre: "Superhero",
-    videoId: "D5fYOnwYkj4"
-  },
-  {
-    id: "6",
-    title: "Chainsaw Man",
-    thumbnail: "https://images.unsplash.com/photo-1617696002096-1a0c8e65e9da?w=400&h=600&fit=crop",
-    episode: "EP 12",
-    rating: 8.8,
-    year: "2023",
-    genre: "Horror",
-    videoId: "v4ylerTL77o"
-  }
-];
+import { getMuseAsiaVideos, YouTubeVideo } from "@/services/youtube";
 
 const Index = () => {
   const [selectedVideo, setSelectedVideo] = useState<{ id: string; title: string } | null>(null);
+  const { data: videos = [] } = useQuery<YouTubeVideo[]>({
+    queryKey: ["museasia-videos"],
+    queryFn: getMuseAsiaVideos,
+  });
 
-  const handleAnimeClick = (anime: typeof animeData[0]) => {
-    setSelectedVideo({ id: anime.videoId, title: anime.title });
+  const handleVideoClick = (video: YouTubeVideo) => {
+    setSelectedVideo({ id: video.id, title: video.title });
   };
 
   return (
@@ -152,16 +94,16 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {animeData.map((anime) => (
+            {videos.map((video) => (
               <AnimeCard
-                key={anime.id}
-                title={anime.title}
-                thumbnail={anime.thumbnail}
-                episode={anime.episode}
-                rating={anime.rating}
-                year={anime.year}
-                genre={anime.genre}
-                onClick={() => handleAnimeClick(anime)}
+                key={video.id}
+                title={video.title}
+                thumbnail={video.thumbnail}
+                episode="Video"
+                rating={0}
+                year={new Date(video.publishedAt).getFullYear().toString()}
+                genre="Muse Asia"
+                onClick={() => handleVideoClick(video)}
               />
             ))}
           </div>

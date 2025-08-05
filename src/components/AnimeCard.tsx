@@ -36,12 +36,14 @@ export const AnimeCard = ({ title, thumbnail, episode, rating, year, genre, onCl
               {episode}
             </Badge>
           </div>
-          <div className="absolute top-2 left-2">
-            <div className="flex items-center gap-1 bg-background/80 rounded-full px-2 py-1">
-              <Star className="h-3 w-3 fill-accent text-accent" />
-              <span className="text-xs font-medium">{rating}</span>
+          {rating > 0 && (
+            <div className="absolute top-2 left-2">
+              <div className="flex items-center gap-1 bg-background/80 rounded-full px-2 py-1">
+                <Star className="h-3 w-3 fill-accent text-accent" />
+                <span className="text-xs font-medium">{rating}</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="p-4">
           <h3 className="font-semibold text-sm mb-2 line-clamp-2 leading-tight">{title}</h3>

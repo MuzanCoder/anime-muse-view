@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import authRoutes from './routes/auth.js';
 import animeRoutes from './routes/anime.js';
+import youtubeRoutes from './routes/youtube.js';
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/anime', animeRoutes);
+app.use('/api/youtube', youtubeRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
